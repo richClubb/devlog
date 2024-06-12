@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "imperative_example", "imper
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c_sharp_imperative_example", "c_sharp_imperative_example", "{926BB52C-62A7-4186-AC91-05A74CD45DB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "c_sharp_imperative_example\Tests\Tests.csproj", "{5C3B7689-7C5E-4E0A-AE7A-66906D396ED2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "c_sharp_imperative_example\tests\tests.csproj", "{5C3B7689-7C5E-4E0A-AE7A-66906D396ED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "c_sharp_functional_example", "..\c_sharp_functional_example\c_sharp_functional_example.csproj", "{6C48C9C8-6DF9-4B5C-AD80-3128483F95B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +30,10 @@ Global
 		{5C3B7689-7C5E-4E0A-AE7A-66906D396ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C3B7689-7C5E-4E0A-AE7A-66906D396ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C3B7689-7C5E-4E0A-AE7A-66906D396ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C48C9C8-6DF9-4B5C-AD80-3128483F95B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C48C9C8-6DF9-4B5C-AD80-3128483F95B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C48C9C8-6DF9-4B5C-AD80-3128483F95B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C48C9C8-6DF9-4B5C-AD80-3128483F95B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{479AE2DF-8E5F-43C9-A2A6-6F5E84629CAD} = {61780E68-4143-4F05-ACFA-D15614150B41}

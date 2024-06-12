@@ -15,12 +15,14 @@ public static class ComputerGroupExtensions
         }
 
         var allIpAddresses = new List<string>();
-        var allComputerGroupNames = new List<ComputerGroup>();
+        var allComputerGroupNames = new List<string>();
         var allComputerNames = new List<string>();
 
         foreach(var computerGroup in computerGroups)
         {
-            
+            allComputerGroupNames.Add(computerGroup.Name);
+
+            computerGroup.Computers.Validate();
         }
     }
 }

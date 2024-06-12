@@ -1,6 +1,6 @@
 using imperative_example;
 
-namespace Tests;
+namespace tests;
 
 [TestClass]
 public class UnitTest1
