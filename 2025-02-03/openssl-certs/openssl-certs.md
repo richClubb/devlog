@@ -110,6 +110,11 @@ You can verify using the public key
 
 Question: Can the verify be easily done using a single command?
 
+### Notes
+
+Found this (https://pagefault.blog/2019/04/22/how-to-sign-and-verify-using-openssl/) which looks like a smoother way of doing it
+
+
 # Follow up
 
 * Cert rotation, how to do this in an automated / semi-automated way
