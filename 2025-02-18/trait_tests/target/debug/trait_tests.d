@@ -1,0 +1,1 @@
+/home/richard/personal/devlog/2025-02-18/trait_tests/target/debug/trait_tests: /home/richard/personal/devlog/2025-02-18/trait_tests/src/main.rs /home/richard/personal/devlog/2025-02-18/trait_tests/src/string_extension/mod.rs
