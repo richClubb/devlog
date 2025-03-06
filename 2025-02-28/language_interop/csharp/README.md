@@ -1,0 +1,3 @@
+## Look into...
+
+* [.net native](https://learn.microsoft.com/en-us/windows/uwp/dotnet-native/) this looks to be useful for the whole cross compilation thing
