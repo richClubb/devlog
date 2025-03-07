@@ -7,6 +7,9 @@ namespace CIntMathWrapper
         [DllImport("libc_int_math_lib.so")]
         public static extern byte c_uint8_add(byte a, byte b);
 
+        [DllImport("libcpp_int_math_lib.so")]
+        public static extern byte c_uint8_sub(byte a, byte b);
+
     }
 
 }

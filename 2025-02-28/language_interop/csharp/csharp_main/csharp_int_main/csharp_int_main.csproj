@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="csharp_int_math_lib">
+      <HintPath>/workspaces/devlog/2025-02-28/language_interop/csharp/external_libs/csharp_int_math_lib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

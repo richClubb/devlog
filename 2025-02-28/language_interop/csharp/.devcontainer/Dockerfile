@@ -13,3 +13,4 @@ RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod
 
 RUN apt update && apt install -y dotnet-sdk-8.0 dotnet-runtime-8.0
 
+RUN export LD_LIBRARY_PATH=/home/richard/personal/devlog/2025-02-28/language_interop/csharp/external_libs
