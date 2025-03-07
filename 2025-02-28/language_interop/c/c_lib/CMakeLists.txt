@@ -11,6 +11,7 @@ project(
 # For Library Creation
 add_library(
     "${PROJECT_NAME}_lib" 
+    SHARED
     "${PROJECT_SOURCE_DIR}/src/c_int_math.c"
 )
 
@@ -25,7 +26,14 @@ add_custom_command(
     "${PROJECT_NAME}_lib" 
     POST_BUILD
     COMMAND 
-    ${CMAKE_COMMAND} -E copy libc_int_math_lib.a ${PROJECT_SOURCE_DIR}/lib/
+    ${CMAKE_COMMAND} -E copy libc_int_math_lib.so ${PROJECT_SOURCE_DIR}/lib/
+)
+
+set_target_properties(
+    "${PROJECT_NAME}_lib" 
+    PROPERTIES
+    PUBLIC_HEADER
+    "${PROJECT_SOURCE_DIR}/include/c_int_math.h"
 )
 
 # For Unit Tests

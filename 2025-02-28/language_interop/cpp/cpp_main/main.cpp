@@ -10,6 +10,8 @@ int main(void)
 {
     uint8_t temp;
 
+    printf("C++ Language Interop\n\n");
+
     // Using C
     temp = c_uint8_add(1, 2);
     printf("Add using C: %d\n", temp);

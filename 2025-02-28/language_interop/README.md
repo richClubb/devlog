@@ -12,14 +12,15 @@ If you have a project that wants to use a different language this shouldn't be a
 
 ## Library Interop
 
-|            | **C**      | **C++**    | **C#**     | **Python** | **Rust**   | **Erlang** |   **F#**   |
+|            | **C**      | **C++**    | **C#**     | **Python** | **Rust**   | **Erlang?** |   **F#?**   |
 |------------|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-| **C**      | Done       | Done       | TODO       | TODO       | TODO       | TODO       | TODO       |
-| **C++**    | Done       | Done       | TODO       | TODO       | TODO       | TODO       | TODO       |
+| **C**      | Done       | Done       | TODO       | Done       | TODO       | TODO       | TODO       |
+| **C++**    | Done       | Done       | TODO       | Done       | TODO       | TODO       | TODO       |
 | **C#**     | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       |
 | **Python** | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       |
 | **Rust**   | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       |
 | **Erlang** | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       |
+| **F#**     | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       | TODO       |
 
 ## Tests
 

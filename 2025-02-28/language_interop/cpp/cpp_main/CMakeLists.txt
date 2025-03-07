@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.10)
 
 project(
     cpp_int_math
-    LANGUAGES C
+    LANGUAGES CXX
 )
 
-add_executable(${PROJECT_NAME} "${PROJECT_SOURCE_DIR}/main.cpp")
-
-set(PATH "${PROJECT_SOURCE_DIR}")
-message("${PATH}")
+add_executable(
+    ${PROJECT_NAME} 
+    "${PROJECT_SOURCE_DIR}/main.cpp"
+)
 
 target_include_directories(
     ${PROJECT_NAME} 
@@ -29,4 +29,4 @@ target_link_libraries(
     PUBLIC
     "cpp_int_math_lib"
     "c_int_math_lib"
-    )
+)

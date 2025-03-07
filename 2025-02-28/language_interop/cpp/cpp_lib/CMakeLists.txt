@@ -5,11 +5,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "lib")
 cmake_minimum_required(VERSION 3.25)
 
 project(
-    cpp_int_math_lib
+    cpp_int_math
     LANGUAGES CXX
 )
 
-add_library("${PROJECT_NAME}_lib" "src/cpp_int_math.cpp")
+add_library(
+    "${PROJECT_NAME}_lib"
+    SHARED
+    "src/cpp_int_math.cpp"
+)
 
 target_include_directories("${PROJECT_NAME}_lib" PRIVATE "include")
 
@@ -18,7 +22,7 @@ add_custom_command(
     "${PROJECT_NAME}_lib" 
     POST_BUILD
     COMMAND 
-    ${CMAKE_COMMAND} -E copy libcpp_int_math_lib.a ${PROJECT_SOURCE_DIR}/lib/
+    ${CMAKE_COMMAND} -E copy lib/libcpp_int_math_lib.so ${PROJECT_SOURCE_DIR}/lib/
 )
 
 # For Unit Tests
