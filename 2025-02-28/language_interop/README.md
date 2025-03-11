@@ -9,21 +9,25 @@ If you have a project that wants to use a different language this shouldn't be a
 * Each language should call the libraries of each other language
 * All links and guides should be referenced for further use.
 * Try to use the documentation for each project before going for a more general search
+* Show a gRPC method of calling between different languages
+* Profile the difference in time between the gRPC and the native language version
+* Profile the impact on calling the code
 
 ## Library Interop
 
-|            | **C**      | **C++**    | **C#**     | **Python** | **Rust**   | **Erlang?** |   **F#?**   |
-|------------|:----------:|:----------:|:----------:|:----------:|:----------:|:-----------:|:-----------:|
-| **C**      | Done       | Done       | Done       | Done       | -          | -           | -           |
-| **C++**    | Done       | Done       | Done       | Done       | -          | -           | -           |
-| **C#**     | -          | -          | Done       | -          | -          | -           | -           |
-| **Python** | -          | -          | -          | -          | -          | -           | -           |
-| **Rust**   | -          | -          | -          | -          | -          | -           | -           |
-| **Erlang** | -          | -          | -          | -          | -          | -           | -           |
-| **F#**     | -          | -          | -          | -          | -          | -           | -           |
+|            | **C**      | **C++**    | **C#**     | **Python** | **Rust**   |   **F#**   |
+|------------|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
+| **C**      | Done       | Done       | Done       | Done       | -          | -          |
+| **C++**    | Done       | Done       | Done       | Done       | -          | -          |
+| **C#**     | -          | -          | Done       | Done       | -          | -          |
+| **Python** | -          | -          | -          | Done       | -          | -          |
+| **Rust**   | -          | -          | -          | -          | Done       | -          |
+| **F#**     | -          | -          | -          | -          | -          | -          |
 
 ## Tests
 
-| Test Type  | **C**      | **C++**    | **C#**     | **Python** | **Rust**   | **Erlang** |   **F#**   |
-|------------|:----------:|------------|------------|------------|------------|------------|------------|
-| Unit Tests | cunit      | cunit      | mstest     | -          | -          | -          | -          |
+Another objective is to learn how to use the test frameworks for each of these languages
+
+| Test Type  | **C**      | **C++**    | **C#**     | **Python** | **Rust**   |   **F#**   |
+|------------|:----------:|------------|------------|------------|------------|------------|
+| Unit Tests | cunit      | cunit      | mstest     | pytest     | cargo test | -          |

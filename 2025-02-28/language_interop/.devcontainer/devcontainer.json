@@ -1,11 +1,13 @@
 {
-    "name": "c container",
+    "name": "language interop container",
     "dockerFile" : "Dockerfile",
     "customizations": {
         "vscode": {
             "extensions": [
                 "ms-vscode.cpptools-extension-pack",
-                "ms-vscode.cmake-tools"
+                "ms-vscode.cmake-tools",
+                "ms-dotnettools.csharp",
+                "ms-dotnettools.csdevkit"
             ]
         }
     }

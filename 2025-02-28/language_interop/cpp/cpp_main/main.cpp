@@ -21,13 +21,13 @@ int main(void)
     printf("Add using C++: %d\n", temp);
     
     // Using C#
-    printf("add using C#: NOT IMPLEMENTED\n");
+    printf("Add using C#: NOT IMPLEMENTED\n");
 
     // Using Python
-    printf("add using Python: NOT IMPLEMENTED\n");
+    printf("Add using Python: NOT IMPLEMENTED\n");
 
     // Using Rust
-    printf("add using Rust: NOT IMPLEMENTED\n");
+    printf("Add using Rust: NOT IMPLEMENTED\n");
     
     return 0;
 }
