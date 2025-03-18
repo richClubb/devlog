@@ -17,12 +17,15 @@ If you have a project that wants to use a different language this shouldn't be a
 
 |            | **C**      | **C++**    | **C#**     | **Python** | **Rust**   |   **F#**   |
 |------------|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-| **C**      | Done       | Done       | Done       | Done       | -          | -          |
-| **C++**    | Done       | Done       | Done       | Done       | -          | -          |
-| **C#**     | -          | -          | Done       | Done       | -          | -          |
+| **C**      | Done       | Done       | Done       | Done       | -          | Done       |
+| **C++**    | Done       | Done       | Done       | Done       | -          | Done       |
+| **C#**     | -          | -          | Done       | Done       | -          | Done       |
 | **Python** | -          | -          | -          | Done       | -          | -          |
-| **Rust**   | -          | -          | -          | -          | Done       | -          |
-| **F#**     | -          | -          | -          | -          | -          | -          |
+| **Rust**   | -          | -          | Done       | -          | Done       | -          |
+| **F#**     | -          | -          | Done       | Issues(2)  | -          | Semi(1)    |
+
+1. Issues with casting.
+2. Issues with importing the F# which might be related to the pythonnet library
 
 ## Tests
 
@@ -30,4 +33,4 @@ Another objective is to learn how to use the test frameworks for each of these l
 
 | Test Type  | **C**      | **C++**    | **C#**     | **Python** | **Rust**   |   **F#**   |
 |------------|:----------:|------------|------------|------------|------------|------------|
-| Unit Tests | cunit      | cunit      | mstest     | pytest     | cargo test | -          |
+| Unit Tests | cunit      | cunit      | mstest     | pytest     | cargo test | mstest     |

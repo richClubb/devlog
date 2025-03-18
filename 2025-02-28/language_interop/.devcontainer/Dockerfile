@@ -22,6 +22,6 @@ RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod
     apt-get update && \
     apt-get install -y dotnet-sdk-8.0
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -- -y
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 RUN PATH=$PATH:/home/root/.cargo/bin

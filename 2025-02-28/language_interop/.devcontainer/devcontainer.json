@@ -7,7 +7,8 @@
                 "ms-vscode.cpptools-extension-pack",
                 "ms-vscode.cmake-tools",
                 "ms-dotnettools.csharp",
-                "ms-dotnettools.csdevkit"
+                "ms-dotnettools.csdevkit",
+                "icsharpcode.ilspy-vscode"
             ]
         }
     }

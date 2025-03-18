@@ -1,15 +1,17 @@
+#[unsafe(no_mangle)]
 pub fn add(left: u8, right: u8) -> u8 {
     
-    if (std::u8::MAX - left) < right {
+    if (std::u8::MAX - left) < right{
         return std::u8::MAX;
     }
 
     left + right
 }
 
+#[unsafe(no_mangle)]
 pub fn sub(left: u8, right: u8) -> u8 {
     
-    if (std::u8::MAX - right) < left {
+    if right > left {
         return std::u8::MIN;
     }
     left - right
@@ -22,6 +24,36 @@ mod tests {
     #[test]
     fn test_add_basic() {
         assert_eq!(add(1, 2), 3);
+    }
+
+    #[test]
+    fn test_add_equal() {
+        assert_eq!(add(127, 127), 254);
+    }
+
+    #[test]
+    fn test_add_equal_over_boundary() {
+        assert_eq!(add(128, 128), 255);
+    }
+
+    #[test]
+    fn test_add_mid_1() {
+        assert_eq!(add(128, 127), 255);
+    }
+
+    #[test]
+    fn test_add_mid_1_over_boundary() {
+        assert_eq!(add(129, 127), 255);
+    }
+
+    #[test]
+    fn test_add_mid_2() {
+        assert_eq!(add(127, 128), 255);
+    }
+
+    #[test]
+    fn test_add_mid_2_over_boundary() {
+        assert_eq!(add(127, 129), 255);
     }
 
     #[test]

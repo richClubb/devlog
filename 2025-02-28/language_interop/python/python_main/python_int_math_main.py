@@ -33,12 +33,17 @@ if __name__ == "__main__":
 
     # The python environment needs the C# runtime installed. This might be true for a lot of the examples so it might be better
     # to have a devcontainer for the entire project
-    clr.AddReference("/workspaces/devlog/2025-02-28/language_interop/csharp/external_libs/csharp_int_math_lib.dll")
-    from csharp_int_math_lib import IntMath
-    csharp_temp = IntMath.addByte(1, 2)
+    clr.AddReference("/workspaces/devlog/2025-02-28/language_interop/external_libs/csharp_int_math_lib.dll")
+    from csharp_int_math_lib import IntMath as cs_IntMath
+    csharp_temp = cs_IntMath.addByte(1, 2)
     print("add using C#: {}".format(csharp_temp))
 
     python_temp = uint8.uint8_add(1, 2)
     print("add using Python: {}".format(python_temp))
 
     print("add using Rust: NOT IMPLEMENTED")
+
+    clr.AddReference("/workspaces/devlog/2025-02-28/language_interop/external_libs/fsharp_int_math.dll")
+    from fsharp_int_math import IntMath as fs_IntMath
+    fsharp_temp = fs_IntMath.addByte(1, 2)
+    print("add using F#: NOT IMPLEMENTED")
