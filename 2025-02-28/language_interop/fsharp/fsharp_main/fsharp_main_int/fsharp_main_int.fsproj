@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="csharp_int_math_lib">
+      <HintPath>/workspaces/devlog/2025-02-28/language_interop/external_libs/csharp_int_math_lib.dll</HintPath>
+    </Reference>
+    <Reference Include="fsharp_int_math">
+      <HintPath>/workspaces/devlog/2025-02-28/language_interop/external_libs/fsharp_int_math.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
