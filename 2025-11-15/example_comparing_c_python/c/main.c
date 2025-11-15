@@ -5,6 +5,7 @@ int main(int argc, char** argv)
 
     int array[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
+    // using the += operator
     {
         int total = 0;
         for (int index = 0; index < 10; index++)
@@ -14,6 +15,7 @@ int main(int argc, char** argv)
         printf("Total (method 1) is: %d\n", total);
     }
 
+    // different way of just summing the total
     {
         int total = 0;
         for (int index = 0; index < 10; index++)
@@ -23,6 +25,18 @@ int main(int argc, char** argv)
         printf("Total (method 2) is: %d\n", total);
     }
 
+    // using pointer arithmetic
+    {
+        int total = 0;
+        int *array_ptr = array;
+        for (int index = 0; index < 10; index++)
+        {
+            total += *array_ptr++;
+        }
+        printf("Total (method 3) is: %d\n", total);
+    }
+
+    // using a while loop
     {
         int index = 0;
         int total = 0;
@@ -31,6 +45,6 @@ int main(int argc, char** argv)
             total += array[index];
             index++;
         }
-        printf("Total (method 3) is: %d\n", total);
+        printf("Total (method 4) is: %d\n", total);
     }
 }
