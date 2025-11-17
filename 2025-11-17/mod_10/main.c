@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-bool match_last_digit_recursive(int probe, int comp, int *pos)
+bool match_digit_recursive(int probe, int comp, int *pos)
 {
     if (probe == 0) return false;
 
@@ -10,10 +10,10 @@ bool match_last_digit_recursive(int probe, int comp, int *pos)
     }
 
     *pos += 1;
-    return match_last_digit_recursive(probe / 10, comp, pos);
+    return match_digit_recursive(probe / 10, comp, pos);
 }
 
-bool match_last_digit_loop(int probe, int comp, int *pos)
+bool match_digit_loop(int probe, int comp, int *pos)
 {
     int temp_probe = probe;
     while(true)
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
         int val = 1234;
         int comp = 1;
         int pos = 0;
-        if (match_last_digit_loop(val, comp, &pos))
+        if (match_digit_loop(val, comp, &pos))
         { 
             printf("Found %d in %d in pos %d\n", comp, val, pos + 1);
         }
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         int val = 1234;
         int comp = 5;
         int pos = 0;
-        if (match_last_digit_loop(val, comp, &pos))
+        if (match_digit_loop(val, comp, &pos))
         { 
             printf("Found %d in %d in pos %d\n", comp, val, pos + 1);
         }
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
         int val = 1234;
         int comp = 1;
         int pos = 0;
-        if (match_last_digit_recursive(val, comp, &pos))
+        if (match_digit_recursive(val, comp, &pos))
         { 
             printf("Found %d in %d in pos %d\n", comp, val, pos + 1);
         }
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
         int val = 1234;
         int comp = 5;
         int pos = 0;
-        if (match_last_digit_recursive(val, comp, &pos))
+        if (match_digit_recursive(val, comp, &pos))
         { 
             printf("Found %d in %d in pos %d\n", comp, val, pos + 1);
         }
