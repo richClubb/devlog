@@ -1,0 +1,11 @@
+[package]
+name = "shell_injection_example"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rocket = "0.5.1"
+
+[[bin]]
+name = "shell_injection_example"
+path = "src/main.rs"

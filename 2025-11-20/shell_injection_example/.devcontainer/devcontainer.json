@@ -1,0 +1,19 @@
+{
+	"name": "shell injection example",
+	"dockerFile": "Dockerfile",
+	"runArgs": ["--network", "host"],
+	"features": {
+		"ghcr.io/devcontainers/features/rust:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rust-lang.rust-analyzer",
+				"vadimcn.vscode-lldb"
+			]
+		}
+	},
+	"mounts": [
+ 	   "type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly"
+	]
+}
