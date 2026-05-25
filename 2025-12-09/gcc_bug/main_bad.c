@@ -2,6 +2,7 @@
 
 void set_42(int* p_value)
 {
+    printf("ptr %p\n", p_value);
     *p_value = 42;
 }
 
