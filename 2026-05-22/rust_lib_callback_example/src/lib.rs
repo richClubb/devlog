@@ -14,10 +14,6 @@ type CallbackCInt = fn() -> c_int;
 
 type CallbackBool = fn() -> bool;
 
-fn dummy() -> c_int {
-    return 0x5a;
-}
-
 #[repr(C)]
 pub struct ALibObject {
     a_thing_1: CallbackCInt,

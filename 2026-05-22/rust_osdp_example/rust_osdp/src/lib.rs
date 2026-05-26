@@ -1,31 +1,6 @@
 
 use std::fmt::Error;
-
-const SOM_POS: usize = 0x00;
-const SOM_VALUE: u8 = 0x53;
-const ADDR_POS: usize = 0x01;
-const LEN_LSB_POS: usize = 0x02;
-const LEN_MSB_POS: usize = 0x03;
-
-const CTRL_POS: usize = 0x04;
-const CTRL_CHKSUM_FLAG_MASK: usize = 0x04;
-
-// for secure messages
-const SEC_BLK_LEN_POS: usize = 0x05;
-const SEC_BLK_TYPE_POS: usize = 0x06;
-const SEC_BLK_DATA_START_POS: usize = 0x07;
-// As secure messages data len can be unknown we don't know the pos of the rest of the info
-// The command byte is offset from the end of the SEC_BLK_DATA end
-const SEC_MSG_COMMAND_POS_OFFSET: usize = 0x01;
-const SEC_MSG_DATA_START_POS: usize = 0x02;
-// the MAC Is offset from the end of the data section
-const SEC_MSG_MAC_POS_OFFSET: usize = 0x01;
-const SEC_MSG_CRC_CHECKSUM_OFFSET: usize = 0x05;
-
-// for non-secure messages
-const NON_SEC_MSG_COMMAND_POS: usize = 0x05;
-const NON_SEC_MSG_DATA_START_POS: usize = 0x06;
-const NON_SEC_MSG_CRC_CHECKSUM_OFFSET: usize = 0x01;
+use std::ptr::null;
 
 enum OsdpMessageChecksumType {
     CHECKSUM,
@@ -53,6 +28,8 @@ pub struct OsdpMessage {
     sec_blk_type: u8,
     //sec_blk_data: Vec<u8>,
     cmnd: u8,
+    data_ptr: *const u8,
+    data_ptr_size: u32,
     //data: Vec<u8>,
     mac: u32
 }
@@ -75,23 +52,35 @@ impl OsdpMessage {
         return false;
     }
 
+    fn secure_msg_from_u8_payload(payload: &Vec<u8>) -> OsdpMessage {
+        let length = OsdpMessage::get_length(payload);
+        let ctrl = payload[CTRL_POS];
+        let sec_blk_len = payload[SEC_BLK_LEN_POS];
+        let sec_blk_type = payload[SEC_BLK_TYPE_POS];
+        let command = 0;
+        let mac: u32 = 0;
+
+        return OsdpMessage { addr: 0, length: length, ctrl: ctrl, sec_blk_len: sec_blk_len, sec_blk_type: sec_blk_type, cmnd: command, data_ptr: null(), data_ptr_size: 0, mac: mac};
+    }
+
+    fn non_secure_msg_from_u8_payload(payload: &Vec<u8>) -> OsdpMessage {
+        let command = payload[NON_SEC_MSG_COMMAND_POS]; 
+        let length = OsdpMessage::get_length(payload);
+        let ctrl = payload[CTRL_POS];
+
+        return OsdpMessage { addr: 0, length: length, ctrl: ctrl, sec_blk_len: 0, sec_blk_type: 0, cmnd: command, data_ptr: null(), data_ptr_size: 0, mac: 0};
+    }
+
     // Requires the payload to have been validated correctly.
     pub fn from_u8_payload(payload: &Vec<u8>) -> OsdpMessage{
-        let length = OsdpMessage::get_length(payload);
+        
         let ctrl = payload[CTRL_POS];
         
         if OsdpMessage::is_secure_message(&ctrl) {
-            let sec_blk_len = payload[SEC_BLK_LEN_POS];
-            let sec_blk_type = payload[SEC_BLK_TYPE_POS];
-            let command = 0;
-            let mac: u32 = 0;
-
-            return OsdpMessage { addr: 0, length: length, ctrl: ctrl, sec_blk_len: sec_blk_len, sec_blk_type: sec_blk_type, cmnd: command, mac: mac};
+            return OsdpMessage::secure_msg_from_u8_payload(payload)
         }
         else {
-            let command = payload[NON_SEC_MSG_COMMAND_POS]; 
-
-            return OsdpMessage { addr: 0, length: length, ctrl: ctrl, sec_blk_len: 0, sec_blk_type: 0, cmnd: command, mac: 0};
+            return OsdpMessage::non_secure_msg_from_u8_payload(payload)
         }
     }
 
@@ -110,6 +99,7 @@ pub struct OsdpEngine {
     handler_functions: *const OsdpFuncHandler,
     handler_functions_size: u8,
     nack_handler_function: fn(&OsdpMessage) -> OsdpMessage
+    decode_message_function: fn(&OsdpMessage) -> OsdpMessage
 }
 
 impl OsdpEngine {
