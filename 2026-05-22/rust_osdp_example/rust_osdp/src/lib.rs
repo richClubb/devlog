@@ -23,7 +23,7 @@ const SEC_BLK_DATA_START_POS: usize = 0x07;
 // As secure messages data len can be unknown we don't know the pos of the rest of the info
 // The command byte is offset from the end of the SEC_BLK_DATA end
 const SEC_MSG_COMMAND_POS_OFFSET: usize = 0x01;
-const SEC_MSG_DATA_START_POS: usize = 0x02;
+const SEC_MSG_DATA_START_POS_OFFSET: usize = 0x02;
 // the MAC Is offset from the end of the data section
 const SEC_MSG_MAC_POS_OFFSET: usize = 0x01;
 const SEC_MSG_CRC_CHECKSUM_OFFSET: usize = 0x05;
@@ -47,7 +47,7 @@ use std::os::raw::{
 #[repr(C)]
 #[derive(Clone)]
 pub struct OsdpFuncHandler {
-    function: fn(&OsdpMessage) -> OsdpMessage,
+    function: fn(*mut OsdpMessage) -> OsdpMessage,
     command_id: u8,
 }
 
@@ -61,12 +61,12 @@ pub struct OsdpMessage {
     // Would rather these be vectors
     sec_blk_data_ptr: *const u8,
     sec_blk_data_ptr_size: u16,
-    //sec_blk_data: Vec<u8>,
+    sec_blk_data: Vec<u8>,
     cmnd: u8,
     // Would rather these be vectors
     data_ptr: *const u8,
     data_ptr_size: u32,
-    //data: Vec<u8>,
+    data: Vec<u8>,
     mac: u32
 }
 
@@ -80,10 +80,12 @@ impl OsdpMessage {
             sec_blk_len: 0, 
             sec_blk_type: 0, 
             sec_blk_data_ptr: null(), 
-            sec_blk_data_ptr_size: 0, 
+            sec_blk_data_ptr_size: 0,
+            sec_blk_data: vec![],
             cmnd: 0, 
             data_ptr: null(), 
-            data_ptr_size: 0, 
+            data_ptr_size: 0,
+            data: vec![],
             mac: 0
         };
     }
@@ -104,23 +106,46 @@ impl OsdpMessage {
         return false;
     }
 
-    fn secure_msg_from_u8_payload(_: &Vec<u8>) -> OsdpMessage {
-        // let length = OsdpMessage::get_length(payload);
-        // let ctrl = payload[CTRL_POS];
-        // let sec_blk_len = payload[SEC_BLK_LEN_POS];
-        // let sec_blk_type = payload[SEC_BLK_TYPE_POS];
+    fn secure_msg_from_u8_payload(payload: &Vec<u8>) -> OsdpMessage {
+        let length = OsdpMessage::get_length(payload);
+        let ctrl = payload[CTRL_POS];
+        let sec_blk_len = payload[SEC_BLK_LEN_POS];
+        let sec_blk_type = payload[SEC_BLK_TYPE_POS];
+        let sec_blk_data_start = SEC_BLK_DATA_START_POS;
+        let sec_blk_data_end = SEC_BLK_DATA_START_POS + sec_blk_len as usize;
+        let sec_blk_data: Vec<u8> = payload[sec_blk_data_start..sec_blk_data_end].to_vec();
+        let _command_pos = SEC_BLK_DATA_START_POS + sec_blk_len as usize + SEC_MSG_COMMAND_POS_OFFSET;
+        let _data_len = 0;
+        let _data_start = sec_blk_data_end + SEC_BLK_DATA_START_POS;
+        let _data_size = 0;
+        // let data = SEC_BLK_DATA_START_POS + sec_blk_len as usize + SEC_MSG_DATA_START_POS_OFFSET;
         // let command = 0;
         // let mac: u32 = 0;
+
+        let mut message = OsdpMessage::empty();
+        message.length = length;
+        message.ctrl = ctrl;
+        message.sec_blk_type = sec_blk_type;
+        message.sec_blk_len = sec_blk_len;
+        message.sec_blk_data = sec_blk_data;
+        
 
         return OsdpMessage::empty();
     }
 
-    fn non_secure_msg_from_u8_payload(_: &Vec<u8>) -> OsdpMessage {
-        // let command = payload[NON_SEC_MSG_COMMAND_POS]; 
-        // let length = OsdpMessage::get_length(payload);
-        // let ctrl = payload[CTRL_POS];
+    fn non_secure_msg_from_u8_payload(payload: &Vec<u8>) -> OsdpMessage {
+        let command = payload[NON_SEC_MSG_COMMAND_POS]; 
+        let length = OsdpMessage::get_length(payload);
+        let ctrl = payload[CTRL_POS];
+        let data = payload[NON_SEC_MSG_DATA_START_POS..].to_vec();
 
-        return OsdpMessage::empty();
+        let mut osdp_msg = OsdpMessage::empty();
+        osdp_msg.ctrl = ctrl;
+        osdp_msg.length = length;
+        osdp_msg.data = data;
+        osdp_msg.cmnd = command;
+
+        return osdp_msg;
     }
 
     fn get_checksum_type(payload: &Vec<u8>) -> OsdpMessageChecksumType {
@@ -149,19 +174,18 @@ impl OsdpMessage {
         // get type of checksum
         let checksum_type = OsdpMessage::get_checksum_type(payload);
 
-        let message_checksum = match checksum_type {
-            OsdpMessageChecksumType::CHECKSUM => OsdpMessage::extract_checksum(payload),
-            OsdpMessageChecksumType::CRC => OsdpMessage::extract_crc(payload),
-        };
-
-        let calculated_checksum = match checksum_type {
+        let (message_checksum, calculated_checksum) = match checksum_type {
             OsdpMessageChecksumType::CHECKSUM => {
-                let message = &payload[0..(payload.len()-1)];
-                checksum_crc::checksum::calculate_checksum(&message.to_vec()) as u16
+                (
+                    OsdpMessage::extract_checksum(payload),
+                    checksum_crc::checksum::calculate_checksum(&payload[0..(payload.len()-1)].to_vec()) as u16
+                )
             },
             OsdpMessageChecksumType::CRC => {
-                let message = &payload[0..(payload.len()-2)];
-                checksum_crc::crc_fast::calculate_crc(&message.to_vec())
+                (
+                    OsdpMessage::extract_crc(payload),
+                    checksum_crc::crc_fast::calculate_crc(&payload[0..(payload.len()-2)].to_vec())
+                )
             },
         };
 
@@ -210,18 +234,25 @@ impl OsdpMessage {
     }
 
     // Requires the payload to have been validated correctly.
-    pub fn from_u8_payload(payload: &Vec<u8>) -> Result<OsdpMessage, Error>{
+    pub fn from_u8_payload(payload: &Vec<u8>) -> Result<OsdpMessage, &'static str>{
         
         // validate payload
-        let _ = OsdpMessage::validate_payload(payload);
-        
+        if !OsdpMessage::validate_payload(payload) {
+            return Err("Invalid payload");
+        }
+
+        let checksum_size = match OsdpMessage::get_checksum_type(payload) {
+            OsdpMessageChecksumType::CHECKSUM => 1,
+            OsdpMessageChecksumType::CRC => 2,
+        };
+
         let ctrl = payload[CTRL_POS];
         
         if OsdpMessage::is_secure_message(&ctrl) {
-            return Ok(OsdpMessage::secure_msg_from_u8_payload(payload))
+            return Ok(OsdpMessage::secure_msg_from_u8_payload(&payload[..(payload.len() - checksum_size)].to_vec()))
         }
         else {
-            return Ok(OsdpMessage::non_secure_msg_from_u8_payload(payload))
+            return Ok(OsdpMessage::non_secure_msg_from_u8_payload(&payload[..(payload.len() - checksum_size)].to_vec()))
         }
     }
 
@@ -239,26 +270,28 @@ pub struct OsdpEngine {
     last_sequence: u8,
     handler_functions: *const OsdpFuncHandler,
     handler_functions_size: u8,
-    nack_handler_function: fn(&OsdpMessage) -> OsdpMessage,
-    decode_message_function: fn(&OsdpMessage) -> OsdpMessage
+    nack_handler_function: fn(*mut OsdpMessage) -> OsdpMessage,
+    decode_message_function: fn(*mut OsdpMessage) -> OsdpMessage
 }
 
 impl OsdpEngine {
     pub fn process_osdp_message(&self, osdp_message: OsdpMessage) -> Result<OsdpMessage, Error> {
-        let handler_fn: fn(&OsdpMessage) -> OsdpMessage = self.get_handler_fn(osdp_message.cmnd);
+        let handler_fn: fn(*mut OsdpMessage) -> OsdpMessage = self.get_handler_fn(osdp_message.cmnd);
 
+        let osdp_msg_box = Box::new(osdp_message);
         // Ok(OsdpMessage { addr: 0, length: 0, ctrl: 0, sec_blk_len: 0, sec_blk_type: 0, sec_blk_data: vec![0; 1], cmnd: 0, data: vec![0; 1], mac: 0})
-        Ok(handler_fn(&osdp_message))
+        Ok(handler_fn(Box::into_raw(osdp_msg_box)))
     }
 
     pub fn process_osdp_message_c(&self, osdp_message: OsdpMessage) -> Result<OsdpMessage, Error> {
-        let handler_fn: fn(&OsdpMessage) -> OsdpMessage = self.get_handler_fn(osdp_message.cmnd);
+        let handler_fn: fn(*mut OsdpMessage) -> OsdpMessage = self.get_handler_fn(osdp_message.cmnd);
 
         // Ok(OsdpMessage { addr: 0, length: 0, ctrl: 0, sec_blk_len: 0, sec_blk_type: 0, sec_blk_data: vec![0; 1], cmnd: 0, data: vec![0; 1], mac: 0})
-        Ok(handler_fn(&osdp_message))
+        let osdp_msg_box = Box::new(osdp_message);
+        Ok(handler_fn(Box::into_raw(osdp_msg_box)))
     }
 
-    fn get_handler_fn(&self, command: u8) -> fn(&OsdpMessage) -> OsdpMessage {
+    fn get_handler_fn(&self, command: u8) -> fn(*mut OsdpMessage) -> OsdpMessage {
 
         println!("Command: {}", command);
         for index in 0..self.handler_functions_size {
@@ -322,9 +355,6 @@ pub extern "C" fn process_payload(context: OsdpEngine, data: *const c_uchar, siz
     return true;
 }
 
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
 
 #[cfg(test)]
 mod tests {
@@ -412,5 +442,37 @@ mod tests {
         let input: Vec<u8> = vec![0x50, 0x00, 0x07, 0x00, 0x00, 0x60, 0x46];
         let result = OsdpMessage::validate_payload(&input);
         assert_eq!(false, result);
+    }
+
+    #[test]
+    fn test_from_u8_payload_1_poll_example() {
+        let input: Vec<u8> = vec![0x53, 0x00, 0x07, 0x00, 0x00, 0x60, 0x46];
+        let result = OsdpMessage::from_u8_payload(&input);
+        assert!(result.is_ok());
+        let result = result.unwrap();
+        assert_eq![&result.ctrl, &0];
+        assert_eq![&result.cmnd, &0x60];
+        assert_eq![&result.length, &7];
+        assert_eq![&result.data.len(), &0];
+    }
+
+    #[test]
+    fn test_from_u8_payload_2_id_example() {
+        let input: Vec<u8> = vec![0x53, 0x00, 0x08, 0x00, 0x00, 0x61, 0x00, 0x44];
+        let result = OsdpMessage::from_u8_payload(&input);
+        assert!(result.is_ok());
+        let result = result.unwrap();
+        assert_eq![&result.ctrl, &0];
+        assert_eq![&result.cmnd, &0x61];
+        assert_eq![&result.length, &8];
+        assert_eq![&result.data.len(), &1];
+        assert_eq![&result.data[0], &0];
+    }
+
+    #[test]
+    fn test_from_u8_payload_3_error() {
+        let input: Vec<u8> = vec![0x50, 0x00, 0x08, 0x00, 0x00, 0x61, 0x00, 0x44];
+        let result = OsdpMessage::from_u8_payload(&input);
+        assert!(result.is_err());
     }
 }

@@ -52,7 +52,9 @@ bool another() {
 
 OsdpMessage poll_func(OsdpMessage* message) {
     printf("Poll func handler\n");
-    return *message;
+    printf("Something: %d\n", message->length);
+    OsdpMessage* result = (OsdpMessage*)calloc(1, sizeof(OsdpMessage));
+    return *result;
 }
 
 OsdpFuncHandler poll_func_handler = {
@@ -95,7 +97,7 @@ int main(int argc, char** argv) {
     osdp_engine.nack_handler_function = nack_function_handler;
 
     printf("Poll command handler test\n");
-    uint8_t data_1[] = {0x53, 0x00, 0x07, 0x00, 0x00, 0x60, 0x00, 0x01};
+    uint8_t data_1[] = {0x53, 0x00, 0x07, 0x00, 0x00, 0x60, 0x46};
 
     const uint8_t* data_1_ptr = &data_1[0];
 
